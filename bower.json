@@ -1,0 +1,23 @@
+{
+  "name": "webplayer",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jesseditson/drinkingsubtitles-webplayer",
+  "authors": [
+    "Jesse Ditson <jesse.ditson@gmail.com>"
+  ],
+  "main": "index.html",
+  "moduleType": [
+    "node"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "build/vendor",
+    "test"
+  ],
+  "dependencies": {
+    "video.js": "~4.11.4",
+    "videojs-sublime-skin": "~1.0.1"
+  }
+}

@@ -1,7 +1,10 @@
 <html>
   <head>
     <title>drinking subtitles</title>
-    <link rel="stylesheet" type="text/css" href="vendor/video-js/video-js.css"/>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="build/vendor/video.js/dist/video-js/video-js.css">
+    <link rel="stylesheet" href="build/vendor/videojs-sublime-skin/dist/videojs-sublime-skin.css">
+    <!-- endinject -->
     <!-- inject:css -->
     <link rel="stylesheet" href="build/styles/styles.css">
     <!-- endinject -->
@@ -14,10 +17,9 @@
 
     <video-player></video-player>
 
-    <script src="vendor/video-js/video.dev.js"></script>
-    <script>
-      videojs.options.flash.swf = "vendor/video-js/video-js.swf"
-    </script>
+    <!-- bower:js -->
+    <script src="build/vendor/video.js/dist/video-js/video.js"></script>
+    <!-- endinject -->
     <!-- inject:js -->
     <script src="build/javascripts/main.js"></script>
     <script src="build/tags/videoPlayer.js"></script>
