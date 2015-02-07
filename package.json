@@ -1,0 +1,26 @@
+{
+  "name": "drinkingsubtitles-webplayer",
+  "version": "0.0.1",
+  "description": "A web player for adding & viewing drinking subtitles to a video.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp watch"
+  },
+  "author": "Jesse Ditson <jesse.ditson@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-browserify": "^0.5.1",
+    "gulp-inject": "^1.1.1",
+    "gulp-open": "^0.3.2",
+    "gulp-riot": "^0.2.3",
+    "gulp-sass": "^1.3.2",
+    "gulp-sourcemaps": "^1.3.0",
+    "gulp-watch": "^4.1.0",
+    "riot": "^2.0.7"
+  },
+  "dependencies": {
+    "riot": "^2.0.7"
+  }
+}

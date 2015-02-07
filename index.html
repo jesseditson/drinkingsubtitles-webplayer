@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>drinking subtitles</title>
+    <link rel="stylesheet" type="text/css" href="vendor/video-js/video-js.css"/>
+    <!-- inject:css -->
+    <link rel="stylesheet" href="build/styles/styles.css">
+    <!-- endinject -->
+    <!-- html5 shiv for video tags -->
+    <script type="text/javascript">
+      document.createElement('video');document.createElement('audio');document.createElement('track');
+    </script>
+  </head>
+  <body>
+
+    <video-player></video-player>
+
+    <script src="vendor/video-js/video.dev.js"></script>
+    <script>
+      videojs.options.flash.swf = "vendor/video-js/video-js.swf"
+    </script>
+    <!-- inject:js -->
+    <script src="build/javascripts/main.js"></script>
+    <script src="build/tags/videoPlayer.js"></script>
+    <!-- endinject -->
+  </body>
+</html>
