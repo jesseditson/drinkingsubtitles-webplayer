@@ -17,7 +17,6 @@
     "test"
   ],
   "dependencies": {
-    "video.js": "~4.11.4",
-    "videojs-sublime-skin": "~1.0.1"
+    "video.js": "~4.11.4"
   }
 }

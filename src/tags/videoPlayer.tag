@@ -1,12 +1,81 @@
+/* global videojs */
+var $ = require('jquery');
+
 <video-player>
 
-  <video id="{opts.id}" class="video-js vjs-sublime-skin vjs-big-play-centered"
-    controls preload="auto" width="{opts.width}" height="{opts.height}"
-    poster="{opts.preview}">
+  <video if={sources.length} id="video" class="video-js vjs-default-skin vjs-big-play-centered"
+    controls preload="auto" width="{width}" height="{height}">
     <source each={sources} src={url} type={type}/>
-    <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+    <!--<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>-->
   </video>
 
-  this.sources = opts.sources;
+  var self = this;
+  var events = opts.events;
+  var videoElement = function(cb){
+    var v = $('#video');
+    if(v.length) cb(videojs('video'),v.find('video').get(0));
+  };
+
+  events.on('videoFilename',function(filename){
+    self.sources = [{
+      url : filename,
+      type : ""
+    }];
+    resizeVideo();
+    self.update();
+    videoElement(function(v){
+      v.one('play',function(){
+        events.trigger('videoLoaded');
+      });
+      v.play();
+    });
+  });
+
+  events.on('scrub',function(amount){
+    // this seems to cause a loader... which sucks but I can't seem to figure out how to do a live scrub.
+    videoElement(function(v){
+      var isPaused = v.paused();
+      v.pause();
+      var currentTime = v.currentTime();
+      v.currentTime(currentTime + amount);
+      if(!isPaused) v.play();
+    });
+  });
+
+  events.on('changePlaybackRate',function(newRate){
+    videoElement(function(v){
+      v.playbackRate(newRate);
+    });
+  });
+
+  events.on('resumeVideo',function(){
+    videoElement(function(v){
+      v.play();
+    });
+  });
+
+  var resizeVideo = function(){
+    var aspect = 9/16;
+    self.width = $(window).width();
+    self.height = self.width * aspect;
+  };
+
+  $(window).resize(function(){
+    resizeVideo();
+  });
+
+  $(document).keydown(function(e){
+    if(e.keyCode == 32){
+      // space bar pressed, pause and fire an event
+      videoElement(function(v){
+        v.pause();
+        events.trigger('createMarkerAtTimestamp',v.currentTime());
+      });
+    }
+  });
+
+  this.sources = [];
+  this.preview = opts.preview;
+
 
 </video-player>

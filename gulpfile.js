@@ -9,7 +9,6 @@ var bower = require('gulp-bower');
 var bowerFiles = require('main-bower-files');
 var runSequence = require('run-sequence');
 var browserify = require('browserify');
-var uglify = require('gulp-uglify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var riotify = require('riotify');
@@ -56,7 +55,6 @@ gulp.task('build-javascripts',function(){
     .pipe(source(getBundleName() + '.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(uglify())
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('build/javascripts/'));
 });
