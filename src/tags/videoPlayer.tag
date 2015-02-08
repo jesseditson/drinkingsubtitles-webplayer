@@ -79,6 +79,7 @@ var $ = require('jquery');
 
   $(window).resize(function(){
     resizeVideo();
+    self.update();
   });
 
   $(document).keydown(function(e){

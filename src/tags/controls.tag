@@ -5,7 +5,7 @@ require('jquery-mousewheel')($);
 
   <div id="controls">
     <div class="file-selector">
-      <input id="video-path" type="text" name="video-path" onchange={fileSelected} value={defaultValue}/>
+      <input id="video-path" type="text" name="video-path" value={defaultValue}/>
       <input type="button" value="load" onclick={load}/>
     </div>
     <div class="rangeslider" if={videoLoaded}>
@@ -17,7 +17,7 @@ require('jquery-mousewheel')($);
     </div>
   </div>
 
-  this.defaultValue = "file:///Users/jesseditson/Desktop/Star%20Wars%20Episode%20VI%20Return%20of%20the%20Jedi%20(1983)%20[1080p]/Star.Wars.Episode.6.Return.of.the.Jedi.1983.1080p.BrRip.x264.BOKUTOX.YIFY.mp4";
+  this.defaultValue = document.referrer;
   var minSpeed = this.minSpeed = 0.5;
   var maxSpeed = this.maxSpeed = 4;
   this.playbackSpeed = 1;
@@ -36,16 +36,10 @@ require('jquery-mousewheel')($);
     // for some reason riot updates the value, but the range slider doesn't change.
     $('#range').val(val);
     self.update();
-    console.log(val);
   }
 
   exportSubs(e) {
     events.trigger('export');
-  }
-
-  fileSelected(e) {
-    var filename = e.target.value;
-    events.trigger('videoFilename',filename);
   }
 
   playbackRateChanged(e){
