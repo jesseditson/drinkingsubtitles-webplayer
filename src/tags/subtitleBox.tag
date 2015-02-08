@@ -2,13 +2,15 @@ var $ = require('jquery');
 
 <subtitle-box>
 
-  <div id="subtitle-modal" if={showingBox}>
-    <input id="subtitle" type="text" value={defaultSubtitle} />
+  <div id="subtitle-modal">
+    <div class="subtitle-input">
+      <input id="subtitle" type="text" value={defaultSubtitle} if={showingBox}/>
+    </div>
   </div>
 
   var self = this;
   this.showingBox = false;
-  this.defaultSubtitle = "DRINK! ";
+  this.defaultSubtitle = "drink!";
 
   var events = opts.events;
 

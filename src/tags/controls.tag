@@ -7,10 +7,13 @@ require('jquery-mousewheel')($);
     <div class="file-selector">
       <input id="video-path" type="text" name="video-path" onchange={fileSelected} value={defaultValue}/>
       <input type="button" value="load" onclick={load}/>
-      <div class="rangeslider" if={videoLoaded}>
-        <input type="range" id="range" name="speed" min={minSpeed} value={playbackSpeed} max={maxSpeed} step=0.25 oninput={playbackRateChanged} />
-        <label for="speed">{playbackSpeedStr}</label>
-      </div>
+    </div>
+    <div class="rangeslider" if={videoLoaded}>
+      <input type="range" id="range" name="speed" min={minSpeed} value={playbackSpeed} max={maxSpeed} step=0.25 oninput={playbackRateChanged} />
+      <label for="speed">{playbackSpeedStr}</label>
+    </div>
+    <div class="export">
+      <input type="button" value="export subs" onclick={exportSubs}/>
     </div>
   </div>
 
@@ -36,6 +39,10 @@ require('jquery-mousewheel')($);
     console.log(val);
   }
 
+  exportSubs(e) {
+    events.trigger('export');
+  }
+
   fileSelected(e) {
     var filename = e.target.value;
     events.trigger('videoFilename',filename);
@@ -56,7 +63,7 @@ require('jquery-mousewheel')($);
     self.update();
   });
 
-  var scrubFactor = 0.8;
+  var scrubFactor = 0.1;
   var speedFactor = 0.1;
 
   $(window).on('mousewheel', function(e) {
