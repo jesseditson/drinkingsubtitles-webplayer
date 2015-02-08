@@ -1,4 +1,7 @@
-// We expose this globally so our tags can use riot without using require.js
-var riot = global.riot = require('riot');
+var riot = require('riot');
 
-riot.mount('*');
+// include our tags
+require('../tags/videoPlayer.tag');
+require('../tags/controls.tag');
+
+riot.mount('controls');
