@@ -39,7 +39,7 @@ var $ = require('jquery');
       url : filename
     }];
     self.update();
-    setTimeout(updateVideo,1000);
+    updateVideo();
   });
 
   events.on('scrub',function(amount){
