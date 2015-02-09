@@ -65,4 +65,8 @@ eventBus.on('export',function(){
   pom.click();
 });
 
+eventBus.on('importSubtitles',function(file){
+  subtitles.loadFromFile(file);
+});
+
 riot.mount('controls,subtitle-box',{events : eventBus});

@@ -6,8 +6,7 @@ var $ = require('jquery');
   <video if={sources.length} id="video" class="video-js vjs-default-skin vjs-big-play-centered"
     controls preload="auto" width="{width}" height="{height}">
     <source each={sources} src={url} type={type}/>
-    <track each={tracks} kind="captions" src={url} srclang="en" label="Drinks" default/>
-    <!--<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>-->
+    <track each={tracks} kind="subtitles" src={url} srclang="en" label="Drinks" default/>
   </video>
 
   var self = this;
@@ -17,17 +16,7 @@ var $ = require('jquery');
     if(v.length) cb(videojs('video'),v.find('video').get(0));
   };
 
-  events.on('subtitlesTrack',function(filename){
-    self.tracks=[{
-      url : filename
-    }];
-    self.update();
-  });
-
-  events.on('videoFilename',function(filename){
-    self.sources = [{
-      url : filename
-    }];
+  var updateVideo = function(filename){
     resizeVideo();
     self.update();
     videoElement(function(v){
@@ -40,6 +29,17 @@ var $ = require('jquery');
       });
       v.play();
     });
+  }
+
+  events.on('videoFilename',function(filename,subtitles){
+    self.tracks=[{
+      url : subtitles
+    }];
+    self.sources = [{
+      url : filename
+    }];
+    self.update();
+    setTimeout(updateVideo,1000);
   });
 
   events.on('scrub',function(amount){

@@ -22,6 +22,26 @@ var timestamp = function(time){
   return time;
 };
 
+var timeFromTimestamp = function(timestamp){
+  // convert a timestamp to seconds
+  var timestampPartsPattern = /(?:(\d+):)?(\d+):(\d+).(\d+)/;
+  var match = timestamp.match(timestampPartsPattern);
+  if(match) {
+    var time = 0;
+    var hours = parseInt(match[1],10);
+    var mins = parseInt(match[2],10);
+    var secs = parseInt(match[3],10);
+    var ms = parseInt(match[4],10);
+    time += hours * 3600;
+    time += mins * 60;
+    time += secs;
+    time += ms / 1000;
+    return time;
+  } else {
+    return null;
+  }
+};
+
 var create = function(text,length){
   length = length || 8;
   var timeBegin = this.currentTime - this.subtitleOffset;
@@ -86,6 +106,53 @@ var serializeWebVTT = function(formatStr){
   return out;
 };
 
+var deserializeWebVTT = function(text,force){
+  if(Object.keys(allSubs).length && force !== true){
+    if(confirm('Importing this subtitle file will overwrite your current subtitles. Continue?')){
+      deserializeWebVTT.bind(this,text,force);
+    }
+    return;
+  }
+  var subtitles = {};
+  var timestampPattern = /((?:\d+:)?\d+:\d+.\d+)[^-]*-->[^d]*((?:\d+:)?\d+:\d+.\d+)/;
+  var subKey;
+  text.split("\n").forEach(function(line){
+    var timestampMatch = line.match(timestampPattern);
+    if(timestampMatch) {
+      var start = timeFromTimestamp(match[1]);
+      var end = timeFromTimestamp(match[2]);
+      subKey = start;
+      subtitles[start] = { start : start, end : end };
+    } else if(subKey && !/^\s*$/.test(line)) {
+      var existing = subtitles[subKey]['text'];
+      subtitles[subKey]['text'] = existing ? existing + "\n" : "";
+      subtitles[subKey]['text'] += line;
+    } else {
+      subKey = null;
+    }
+  });
+  console.log(subtitles);
+}
+
+// expects a file object as it's only argument..
+var loadFromFile = function(file){
+  // Check for the various File API support.
+  if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+    return alert('The File APIs are not fully supported by your browser.');
+  }
+  var self = this;
+  var r = new FileReader();
+  r.onload = function(e){
+    var contents = e.target.result;
+    if(/\.vtt$/.test(file.name)) {
+      self.deserializeWebVTT(contents);
+    } else {
+      alert('unknown subtitle file type.');
+    }
+  };
+  r.readAsText(file);
+};
+
 var save = function(){
   storage.set(this.storageKey,allSubs);
 };
@@ -115,5 +182,7 @@ module.exports = function(config){
   this.current = current.bind(this);
   this.deleteCurrent = deleteCurrent.bind(this);
   this.serializeWebVTT = serializeWebVTT.bind(this);
+  this.deserializeWebVTT = deserializeWebVTT.bind(this);
+  this.loadFromFile = loadFromFile.bind(this);
   this.save = save.bind(this);
 }

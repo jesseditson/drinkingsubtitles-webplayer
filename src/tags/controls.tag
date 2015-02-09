@@ -5,19 +5,26 @@ require('jquery-mousewheel')($);
 
   <div id="controls">
     <div class="file-selector">
-      <input id="video-path" type="text" name="video-path" value={defaultValue}/>
-      <input type="button" value="load" onclick={load}/>
+      <input id="video-path" type="text" name="video-path" value={defaultValue} placeholder="path to video"/>
+      <input id="subtitles-path" type="text" value={defaultSubtitlesValue} placeholder="path to subtitles"/>
+      <input type="button" value="load video" onclick={loadVideo}/>
+    </div>
+    <div class="file-uploader" if={videoLoaded}>
+      <input id="subtitles-path" type="file" onchange={loadSubtitles}/>
     </div>
     <div class="rangeslider" if={videoLoaded}>
       <input type="range" id="range" name="speed" min={minSpeed} value={playbackSpeed} max={maxSpeed} step=0.25 oninput={playbackRateChanged} />
       <label for="speed">{playbackSpeedStr}</label>
     </div>
-    <div class="export">
-      <input type="button" value="export subs" onclick={exportSubs}/>
+    <div class="buttons" if={videoLoaded}>
+      <input type="button" value="export subtitles" onclick={exportSubs}/>
+      <!-- TODO: load the subtitles from localStorage -->
+      <!-- <input type="button" value="reload subtitles" onclick={reloadSubs}/> -->
     </div>
   </div>
 
-  this.defaultValue = document.referrer;
+  this.defaultValue = "";
+  this.defaultSubtitlesFile = "";
   var minSpeed = this.minSpeed = 0.5;
   var maxSpeed = this.maxSpeed = 4;
   this.playbackSpeed = 1;
@@ -41,15 +48,25 @@ require('jquery-mousewheel')($);
   exportSubs(e) {
     events.trigger('export');
   }
+  reloadSubs() {
+    events.trigger('reloadSubtitles');
+  }
 
   playbackRateChanged(e){
     var val = parseFloat(e.target.value);
     setPlaybackRate(val);
   }
 
-  load() {
+  loadVideo() {
     var filename = $("#video-path").val();
-    events.trigger('videoFilename',filename);
+    var subtitles = $("#subtitles-path").val();
+    events.trigger('videoFilename',filename,subtitles);
+  }
+
+  loadSubtitles(e) {
+    if(e.target.files && e.target.files[0]){
+      events.trigger('importSubtitles',e.target.files[0]);
+    }
   }
 
   events.on('videoLoaded',function(){
