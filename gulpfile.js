@@ -11,6 +11,7 @@ var runSequence = require('run-sequence');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
+var util = require('gulp-util');
 var riotify = require('riotify');
 var del = require('del');
 
@@ -82,12 +83,11 @@ gulp.task('inject-bower',['bower-install'], function(){
 })
 
 gulp.task('inject-client',function(){
-  return gulp.src('index.html')
-    .pipe(inject(
-      gulp.src([paths.js_build,paths.css_build],{read: false}),
-      {relative : true}
-    ))
-    .pipe(gulp.dest('.'));
+  return gulp.src('./src/index.html')
+    .pipe(inject(gulp.src([paths.js_build,paths.css_build],{read: false}),{
+      ignorePath:'build'
+    }))
+    .pipe(gulp.dest('./build'));
 });
 
 // In later versions of grunt, we'll be able to run things in series. But at the time of writing, multiple injects will clobber each other, so we'll use run-sequence to help us out.

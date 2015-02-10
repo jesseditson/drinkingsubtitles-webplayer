@@ -23,8 +23,8 @@ require('jquery-mousewheel')($);
     </div>
   </div>
 
-  this.defaultValue = "";
-  this.defaultSubtitlesFile = "";
+  this.defaultValue = "file:///Users/jesseditson/Desktop/Jurassic%20Park%20(1993)%20[1080p]/Jurassic.Park.1993.1080p.BRrip.x264.YIFY.mp4";
+  this.defaultSubtitlesValue = "file:///Users/jesseditson/Desktop/Jurassic%20Park%20(1993)%20[1080p]/drinking-subtitles.vtt";
   var minSpeed = this.minSpeed = 0.5;
   var maxSpeed = this.maxSpeed = 4;
   this.playbackSpeed = 1;

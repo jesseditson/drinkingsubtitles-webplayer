@@ -29,7 +29,8 @@
     "riotify": "0.0.7",
     "run-sequence": "^1.0.2",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.0.0"
+    "vinyl-source-stream": "^1.0.0",
+    "gulp-util": "^3.0.3"
   },
   "dependencies": {
     "jquery": "^2.1.3",

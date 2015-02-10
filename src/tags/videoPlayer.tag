@@ -2,73 +2,68 @@
 var $ = require('jquery');
 
 <video-player>
+  <!-- html5 shiv for video tags -->
+  <script type="text/javascript">
+  document.createElement('video');
+  document.createElement('audio');
+  document.createElement('track');
+  </script>
 
-  <video if={sources.length} id="video" class="video-js vjs-default-skin vjs-big-play-centered"
-    controls preload="auto" width="{width}" height="{height}">
-    <source each={sources} src={url} type={type}/>
-    <track each={tracks} kind="subtitles" src={url} srclang="en" label="Drinks" default/>
+  <video if={sources.length} id="video" preload="auto" width="{width}" height="{height}" src={videoUrl}>
+    <track each={tracks} kind="captions" src={url} srclang="en" label="Drinks" crossorigin="anonymous"/>
   </video>
 
   var self = this;
   var events = opts.events;
-  var videoElement = function(cb){
-    var v = $('#video');
-    if(v.length) cb(videojs('video'),v.find('video').get(0));
+
+  var videoElement = function(){
+    return $('#video').get(0);
   };
 
   var updateVideo = function(filename){
     resizeVideo();
     self.update();
-    videoElement(function(v){
-      v.one('play',function(){
-        events.trigger('videoLoaded');
-      });
-      v.on('timeupdate',function(){
-        var time = v.currentTime();
-        events.trigger('timeUpdate',time);
-      });
-      v.play();
-    });
+    var v = videoElement()
+    var loaded = function(){
+      events.trigger('videoLoaded');
+      v.removeEventListener('play',loaded,false);
+    };
+    v.addEventListener('play',loaded,false);
+    v.addEventListener('timeupdate',function(){
+      var time = v.currentTime;
+      events.trigger('timeUpdate',time);
+    },false);
+    v.play();
   }
 
   events.on('videoFilename',function(filename,subtitles){
     self.tracks=[{
       url : subtitles
     }];
-    self.sources = [{
-      url : filename
-    }];
-    self.update();
+    self.videoUrl = filename;
     updateVideo();
   });
 
   events.on('scrub',function(amount){
     // this seems to cause a loader... which sucks but I can't seem to figure out how to do a live scrub.
-    videoElement(function(v){
-      var isPaused = v.paused();
-      v.pause();
-      var currentTime = v.currentTime();
-      v.currentTime(currentTime + amount);
-      if(!isPaused) v.play();
-    });
+    var v = videoElement();
+    var isPaused = v.paused;
+    v.pause();
+    var currentTime = v.currentTime;
+    v.currentTime = currentTime + amount;
+    if(!isPaused) v.play();
   });
 
   events.on('seek',function(time){
-    videoElement(function(v){
-      v.currentTime(time);
-    });
+    videoElement().currentTime = time;
   });
 
   events.on('changePlaybackRate',function(newRate){
-    videoElement(function(v){
-      v.playbackRate(newRate);
-    });
+    videoElement().playbackRate = newRate;
   });
 
   events.on('resumeVideo',function(){
-    videoElement(function(v){
-      v.play();
-    });
+    videoElement().play();
   });
 
   var resizeVideo = function(){
@@ -85,10 +80,9 @@ var $ = require('jquery');
   $(document).keydown(function(e){
     if(e.keyCode == 32){
       // space bar pressed, pause and fire an event
-      videoElement(function(v){
-        v.pause();
-        events.trigger('createMarkerAtTimestamp',v.currentTime());
-      });
+      var v = videoElement();
+      v.pause();
+      events.trigger('createMarkerAtTimestamp',v.currentTime);
     }
   });
 
