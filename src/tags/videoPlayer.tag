@@ -9,8 +9,9 @@ var $ = require('jquery');
   document.createElement('track');
   </script>
 
-  <video if={sources.length} id="video" preload="auto" width="{width}" height="{height}" src={videoUrl}>
-    <track each={tracks} kind="captions" src={url} srclang="en" label="Drinks" crossorigin="anonymous"/>
+  <video if={sources.length} id="video" preload="auto" width="{width}" height="{height}" crossorigin="anonymous" controls>
+    <source each={sources} type={type} src={url}/>
+    <track each={tracks} kind="captions" src={url} srclang="en" label="Drinks" default/>
   </video>
 
   var self = this;
@@ -37,10 +38,14 @@ var $ = require('jquery');
   }
 
   events.on('videoFilename',function(filename,subtitles){
+    // loading local files will not work in chrome - however, it will work if you start with:
+    // /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --allow-file-access-from-files
     self.tracks=[{
       url : subtitles
     }];
-    self.videoUrl = filename;
+    self.sources=[{
+      url : filename
+    }];
     updateVideo();
   });
 

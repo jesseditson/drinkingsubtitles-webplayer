@@ -85,6 +85,7 @@ gulp.task('inject-bower',['bower-install'], function(){
 gulp.task('inject-client',function(){
   return gulp.src('./src/index.html')
     .pipe(inject(gulp.src([paths.js_build,paths.css_build],{read: false}),{
+      relative:true,
       ignorePath:'build'
     }))
     .pipe(gulp.dest('./build'));
@@ -96,7 +97,7 @@ gulp.task('inject',function(callback){
 });
 
 gulp.task('open-index',function(){
-  return gulp.src('index.html')
+  return gulp.src('./build/index.html')
     .pipe(open());
 });
 
